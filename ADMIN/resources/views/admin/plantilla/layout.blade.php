@@ -70,7 +70,7 @@
       <form action="http://localhost:8000/login">
     @csrf
     <button class="btn btn-outline-success" type="submit">Salir</button>
-</form>
+      </form>
 
     </div>
   </div>

@@ -35,9 +35,10 @@
         <td>{{ $proveedor->status }}</td>
         <td>
     <!-- Envolvemos la imagen en un enlace para abrirla al hacer clic -->
-    <a href="{{ asset('storage/' . $proveedor->picture) }}" target="_blank">
-        <img src="{{ asset('storage/' . $proveedor->picture) }}" alt="{{ $proveedor->picture }}" width="100">
-    </a>
+    <a href="{{ asset('storage/images/' . basename($proveedor->picture)) }}" target="_blank">
+    <img src="{{ asset('storage/images/' . basename($proveedor->picture)) }}" alt="{{ $proveedor->picture }}" width="100">
+</a>
+
 </td>
         <td><a href="/proveedores/editar/{{ $proveedor->id }}" > editar </a></td>
       <td><a href="/proveedores/mostrar/{{ $proveedor->id }}" > borrar </a></td>

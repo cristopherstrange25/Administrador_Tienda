@@ -3,7 +3,7 @@
 @section('titulo','CREAR CATEGORIA')
 
 @section('contenido')
-<form class="row g-3 needs-validation" method="POST" action="/categorias/{{$categoria->id}}" 
+<form class="row g-3 needs-validation" method="POST" action="/categorias/{{$categoria->id}}"  enctype="multipart/form-data"
 novalidate enctype="multipart/form-data">
   @csrf
   <p></p>

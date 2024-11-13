@@ -14,38 +14,102 @@ class ProductController extends Controller
             ->get();
         return view('/admin/productos/list')->with('productos', $products);
     }
-    public function crear(){//Vista
-        return view('admin/productos/create');
-    }
-    public function guardar(Request $request){//Proceso
+    public function crear(){
+            // Recuperar proveedores y categorías desde la base de datos
+            $proveedores = DB::table('suppliers')->get(); // O puede usar el modelo Supplier::all() si lo prefieres
+            $categorias = DB::table('categories')->where('status', 'ACTIVO')->get();  // O puede usar el modelo Category::all() si lo prefieres
         
-
-        DB::table('products')->insert([
-            'name' => $request->name,
-            'supplier_id' => $request->supplier_id,
-            'categorie_id' => $request->categorie_id,
-            'price' => $request->price,
-            'quantity' => $request->quantity,
-            'status' => $request->status,
-            'image1' => $request->picture, // Guardar la imagen en image1
-            'image2' => $request->picture, // Guardar la misma imagen en image2
-        ]);
-    
-        // Recuperar productos activos y redirigir a la vista de lista
-        $products = DB::table('products')->where('status', 'ACTIVO')->get();
-        return view('/admin/productos/list')->with('productos', $products);
+            // Pasar los datos a la vista
+            return view('admin.productos.create', compact('proveedores', 'categorias'));
     }
+    public function guardar(Request $request)
+{
+    // Validar la solicitud
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'supplier_id' => 'required|integer',
+        'categorie_id' => 'required|integer',
+        'price' => 'required|numeric',
+        'quantity' => 'required|integer',
+        'status' => 'required|string|max:255',
+        'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
+
+    // Guardar la imagen principal
+    $image1 = $request->file('picture')->store('public/images');
+    $image2 = $image1; // Guardar la misma imagen en image2
+
+    // Guardar las imágenes adicionales
+    $photos = [];
+    if ($request->hasFile('photos')) {
+        foreach ($request->file('photos') as $photo) {
+            $photos[] = $photo->store('public/images');
+        }
+    }
+
+    // Insertar el producto en la base de datos
+    DB::table('products')->insert([
+        'name' => $request->name,
+        'supplier_id' => $request->supplier_id,
+        'categorie_id' => $request->categorie_id,
+        'price' => $request->price,
+        'quantity' => $request->quantity,
+        'status' => $request->status,
+        'image1' => $image1,
+        'image2' => $image2,
+    ]);
+
+    // Recuperar productos activos y redirigir a la vista de lista
+    $products = DB::table('products')->where('status', 'ACTIVO')->get();
+    return view('/admin/productos/list')->with('productos', $products);
+}
     
     public function editar($id) { // Vista
+        $proveedores = DB::table('suppliers')->get();
         $producto = DB::table('products')->where('id', $id)->first();
         $categorias = DB::table('categories')->where('status', 'ACTIVO')->get(); // Obtén las categorías activas
-        return view('admin.productos.edit')->with('producto', $producto)->with('categories', $categorias); // Cambié 'categoria' a 'categories'
+        return view('admin.productos.edit')->with('producto', $producto)->with('proveedores', $proveedores)->with('categorias', $categorias); // Cambié 'categoria' a 'categories'
     }
     
     
-    public function actualizar(Request $request, $id){//Proceso
+    public function actualizar(Request $request, $id)
+{
+    // Validar la solicitud
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'supplier_id' => 'required|integer',
+        'categorie_id' => 'required|integer',
+        'price' => 'required|numeric',
+        'quantity' => 'required|integer',
+        'status' => 'required|string|max:255',
+        'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Hacerlo opcional
+        'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Hacerlo opcional
+    ]);
 
-        DB::table('products')->where('id', $id)
+    // Buscar el producto en la base de datos
+    $producto = DB::table('products')->where('id', $id)->first();
+
+    // Si se sube una nueva imagen principal (picture), guardarla
+    if ($request->hasFile('picture')) {
+        $image1 = $request->file('picture')->store('public/images');
+        $image2 = $image1; // Guardar la misma imagen en image2
+    } else {
+        // Si no hay nueva imagen, mantener las imágenes actuales
+        $image1 = $producto->image1;
+        $image2 = $producto->image2;
+    }
+
+    // Guardar las imágenes adicionales (si las hay)
+    $photos = [];
+    if ($request->hasFile('photos')) {
+        foreach ($request->file('photos') as $photo) {
+            $photos[] = $photo->store('public/images');
+        }
+    }
+
+    // Actualizar los datos del producto en la base de datos
+    DB::table('products')->where('id', $id)
         ->update([
             'name' => $request->name,
             'supplier_id' => $request->supplier_id,
@@ -53,14 +117,15 @@ class ProductController extends Controller
             'price' => $request->price,
             'quantity' => $request->quantity,
             'status' => $request->status,
-            'image1' => $request->picture, // Actualizar la imagen en image1
-            'image2' => $request->picture, // Actualizar la misma imagen en image2
+            'image1' => $image1, // Actualizar la imagen en image1
+            'image2' => $image2, // Actualizar la misma imagen en image2
         ]);
-    
-        // Recuperar productos activos y redirigir a la vista de lista
-        $products = DB::table('products')->where('status', 'ACTIVO')->get();
-        return view('/admin/productos/list')->with('productos', $products);
-    }
+
+    // Recuperar productos activos y redirigir a la vista de lista
+    $products = DB::table('products')->where('status', 'ACTIVO')->get();
+    return view('/admin/productos/list')->with('productos', $products);
+}
+
     
     public function mostrar($id){//Vista 
         $producto = DB::table('products')->where('id',$id)->first();

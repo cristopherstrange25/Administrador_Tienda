@@ -3,7 +3,7 @@
 @section('titulo','CREAR CATEGORIA')
 
 @section('contenido')
-<form class="row g-3 needs-validation" method="POST" action="/categorias" 
+<form class="row g-3 needs-validation" method="POST" action="/categorias" enctype="multipart/form-data"
 novalidate enctype="multipart/form-data">
   @csrf
   <p></p>
@@ -49,17 +49,7 @@ novalidate enctype="multipart/form-data">
         Please provide a valid picture.
       </div>
     </div>
-    <div class="col-md-12">
-      <label for="validationCustom03" class="form-label">Imagenes para la tabla picture</label>
-      <input type="file" accept="image/*" class="form-control" id="validationCustom03" 
-      name ="photos[] "multiple required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        Please provide a valid picture.
-      </div>
-    </div>
+    
     <div class="col-12">
       <button class="btn btn-primary" type="submit">Registrar</button>
     </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-11-2024 a las 05:34:58
+-- Tiempo de generación: 13-11-2024 a las 22:33:03
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -42,7 +42,9 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `description`, `picture`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Bebida', 'Bebida', 'C:\\xampp\\tmp\\php7DC8.tmp', 'ACTIVO', NULL, NULL);
+(1, 'Bebida', 'Bebida', 'C:\\xampp\\tmp\\php7DC8.tmp', 'INACTIVO', NULL, NULL),
+(2, 'Bebidas', 'Todo producto liquido para beber', 'C:\\xampp\\tmp\\php425B.tmp', 'INACTIVO', NULL, NULL),
+(3, 'Bebidas', 'Todo producto liquido para beber', 'public/images/2RK5nFXmyObR4ajLm5YVbhlKffTlTZhKNOol7R1J.jpg', 'ACTIVO', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -224,8 +226,8 @@ CREATE TABLE `products` (
   `price` decimal(6,2) NOT NULL,
   `quantity` int(11) NOT NULL,
   `status` varchar(50) NOT NULL,
-  `image1` varchar(250) NOT NULL,
-  `image2` varchar(250) NOT NULL,
+  `image1` longblob NOT NULL,
+  `image2` longblob NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -235,9 +237,24 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `supplier_id`, `categorie_id`, `price`, `quantity`, `status`, `image1`, `image2`, `created_at`, `updated_at`) VALUES
-(6, 'Fanta', 1, 1, 20.00, 30, 'ACTIVO', 'descarga (1).jpeg', 'descarga (1).jpeg', NULL, NULL),
-(7, 'Coca', 1, 1, 0.00, 2, 'ACTIVO', 'OIP (5).jpeg', 'OIP (5).jpeg', NULL, NULL),
-(8, 'Pepsi', 1, 1, 21.00, 4, 'ACTIVO', 'descarga (1).jpeg', 'descarga (1).jpeg', NULL, NULL);
+(12, 'Coca Cola', 5, 3, 20.00, 24, 'ACTIVO', 0x7075626c69632f696d616765732f426c51755838356739757361594443344543757a4e4943374a5563584d7434746d69785139757a622e6a7067, 0x7075626c69632f696d616765732f426c51755838356739757361594443344543757a4e4943374a5563584d7434746d69785139757a622e6a7067, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `providers`
+--
+
+CREATE TABLE `providers` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `product_type` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `latitude` decimal(10,6) NOT NULL,
+  `longitude` decimal(10,6) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -260,7 +277,7 @@ CREATE TABLE `shippers` (
 CREATE TABLE `suppliers` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(100) NOT NULL,
-  `picture` varchar(100) NOT NULL,
+  `picture` longblob NOT NULL,
   `contact_name` varchar(100) NOT NULL,
   `address` varchar(256) NOT NULL,
   `phone` varchar(100) NOT NULL,
@@ -275,7 +292,8 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`id`, `name`, `picture`, `contact_name`, `address`, `phone`, `email`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'CocaCola', 'OIP (5).jpeg', 'Luis Pedrito Sosa', 'Guadalajara, Jalico', '1231231231', 'cocacola@gmail.com', 'Proveedor de Coca Cola', NULL, NULL);
+(3, 'Luis Fonseca', 0x7075626c69632f696d616765732f41736d306b504d4a5258564c426733354356364933334c6f685230624a4e4d5873685845697738612e6a7067, 'Proveedor de Bimbo', 'El Salto', '3333333333', 'bimbo@gmail.com', 'ACTIVO', NULL, NULL),
+(5, 'Francisco Luna', 0x7075626c69632f696d616765732f6443756d6d71414a6332666e54696433776d7a313874546c386342474268443538786d6d546d62512e6a7067, 'Proveedor de Coca Cola', 'El SAlto', '1111111111', 'cocacola@coca.com', 'ACTIVO', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -370,6 +388,12 @@ ALTER TABLE `products`
   ADD KEY `products_categorie_id_foreign` (`categorie_id`);
 
 --
+-- Indices de la tabla `providers`
+--
+ALTER TABLE `providers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `shippers`
 --
 ALTER TABLE `shippers`
@@ -398,7 +422,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `customers`
@@ -446,7 +470,13 @@ ALTER TABLE `pictures`
 -- AUTO_INCREMENT de la tabla `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT de la tabla `providers`
+--
+ALTER TABLE `providers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `shippers`
@@ -458,7 +488,7 @@ ALTER TABLE `shippers`
 -- AUTO_INCREMENT de la tabla `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `users`

@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>HOLA MUNDO -> @yield('titulo') </title>
+    <title>HOLA MUNDO -> @yield('titulo')</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-fixed/">
 
@@ -26,6 +26,26 @@
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
+      }
+
+      /* Para centrar todo el contenido de la página */
+      .center-all {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Utiliza todo el alto de la pantalla */
+        text-align: center; /* Centra el texto */
+        flex-direction: column; /* Asegura que el contenido esté apilado verticalmente */
+      }
+
+      /* Estilo del pie de página */
+      footer {
+        text-align: center;
+        padding: 20px 0;
+        background-color: #f8f9fa;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
       }
     </style>
 
@@ -63,24 +83,38 @@
               <a class="nav-link" href="/empleados">Administradores</a>
             </li>
           </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+          <form action="http://localhost:8000/login">
+            @csrf
+            <button class="btn btn-outline-success" type="submit">Salir</button>
           </form>
         </div>
       </div>
     </nav>
 
-    <main class="container-fluid">
+    <!-- Todo el contenido centrado -->
+    <main class="container-fluid center-all">
       <!-- Introducción al sistema CANDY -->
       <section>
-        <h1>Bienvenido a CANDY</h1>
-        <p>CANDY es un sistema de ventas intuitivo y eficiente diseñado para facilitar la gestión de productos, pedidos, proveedores y clientes en tu tienda. Con CANDY, podrás gestionar cada aspecto de tu negocio de manera ágil, desde el manejo de inventarios hasta la administración de los pedidos y la relación con tus clientes.</p>
+        <h1>Bienvenido a Retail Store</h1>
+        <p>Retail store es un sistema de ventas intuitivo y eficiente diseñado para facilitar la gestión de productos, pedidos, proveedores y clientes en tu tienda. Con CANDY, podrás gestionar cada aspecto de tu negocio de manera ágil, desde el manejo de inventarios hasta la administración de los pedidos y la relación con tus clientes.</p>
         <p>Explora las distintas secciones del sistema para gestionar proveedores, productos, y mucho más. Estamos aquí para hacer tu experiencia más productiva y sencilla.</p>
       </section>
 
+      <!-- Imagen centrada en la pantalla -->
+      <section>
+  <img src="{{ asset('storage/images/Logo.jpg') }}" alt="Imagen descriptiva" class="img-fluid" style="width: 300px; height: 200px; object-fit: contain;">
+</section>
+
+
+
       @yield('contenido')
     </main>
+
+    <!-- Pie de página con desarrolladores -->
+    <footer>
+      <p>Desarrollado por: <strong>Barroso Gamiño Angel, 
+Campero Calderón Cruz Vanessa, Celestino Martínes Cristopher, García Murguia Emmanuel, Pimerntel Chacòn Saúl Antonio</strong></p>
+    </footer>
 
     <script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
 

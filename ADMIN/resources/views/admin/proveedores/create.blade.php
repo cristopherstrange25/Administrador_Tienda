@@ -1,9 +1,9 @@
 @extends('admin.plantilla.layout')
 
-@section('titulo','CREAR CATEGORIA')
+@section('titulo','CREAR PROVEEDOR')
 
 @section('contenido')
-<form class="row g-3 needs-validation"  method="POST" action="/proveedores" novalidate>
+<form class="row g-3 needs-validation"  method="POST" action="/proveedores" enctype="multipart/form-data" novalidate>
 @csrf
   <p></p>
   <p></p>
@@ -90,13 +90,7 @@
         Please provide a valid picture.
       </div>
     </div>
-    <div class="col-md-12">
-      <label for="validationCustom03" class="form-label">Imagenes para la tabla picture</label>
-      <input type="file" accept="image/*" class="form-control" id="validationCustom03" 
-      name ="photos[] "multiple required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
+    
       <div class="invalid-feedback">
         Please provide a valid picture.
       </div>

@@ -45,7 +45,7 @@
   <div class="container-fluid">
     
       
-      <h1 class="color">*****CANDY SYSTEM*****
+      <h1 class="color">     Retail Store
     </h1>
     </div>
   </div>

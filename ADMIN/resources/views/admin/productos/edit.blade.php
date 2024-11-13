@@ -16,21 +16,32 @@
     </div>
 
     <div class="col-md-12">
-        <label for="validationCustom02" class="form-label">Id de proveedor</label>
-        <input type="number" class="form-control" id="validationCustom02" name="supplier_id" value="{{ $producto->supplier_id }}" required>
-        <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please choose a supplier id.</div>
-    </div>
-
-    <div class="col-md-12">
-        <label for="validationCustom03" class="form-label">Id de categoría</label>
-        <select class="form-control" id="validationCustom03" name="categorie_id" required>
-            @foreach($categories as $category)
-                <option value="{{ $category->id }}" {{ $category->id == $producto->categorie_id ? 'selected' : '' }}>{{ $category->name }}</option>
+        <label for="validationCustom02" class="form-label">Proveedor</label>
+        <select name="supplier_id" class="form-control" id="validationCustom02" required>
+            <option selected disabled value="">Seleccionar proveedor</option>
+            @foreach ($proveedores as $proveedor)
+                <option value="{{ $proveedor->id }}" {{ $proveedor->id == $producto->supplier_id ? 'selected' : '' }}>
+                    {{ $proveedor->id }} - {{ $proveedor->name }} ({{ $proveedor->contact_name }})
+                </option>
             @endforeach
         </select>
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please choose a category id.</div>
+        <div class="invalid-feedback">Please choose a supplier.</div>
+    </div>
+
+    <div class="col-md-12">
+        <label for="validationCustom03" class="form-label">Categoría</label>
+        <select name="categorie_id" class="form-control" id="validationCustom03" required>
+    <option selected disabled value="">Seleccionar categoría</option>
+    @foreach ($categorias as $categoria)
+        <option value="{{ $categoria->id }}" {{ $categoria->id == $producto->categorie_id ? 'selected' : '' }}>
+            {{ $categoria->id }} - {{ $categoria->name }}
+        </option>
+    @endforeach
+</select>
+
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please choose a category.</div>
     </div>
 
     <div class="col-md-12">

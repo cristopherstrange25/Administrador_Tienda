@@ -28,10 +28,12 @@
       <td>{{ $categoria->name }}</td>
       <td>{{ $categoria->description }}</td>
       <td>
-    <!-- Envolvemos la imagen en un enlace para abrirla al hacer clic -->
-    <a href="{{ asset('storage/' . $categoria->picture) }}" target="_blank">
-        <img src="{{ asset('storage/' . $categoria->picture) }}" alt="{{ $categoria->picture }}" width="100">
-    </a>
+    
+      <a href="{{ asset('storage/images/' . basename($categoria->picture)) }}" data-lightbox="image-{{ $categoria->id }}" data-title="picture">
+    <img src="{{ asset('storage/images/' . basename($categoria->picture)) }}" alt="Imagen 1" width="100">
+</a>
+
+
 </td>
       <td><a href="/categorias/editar/{{ $categoria->id }}" > editar </a></td>
       <td><a href="/categorias/mostrar/{{ $categoria->id }}" > borrar </a></td>
